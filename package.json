@@ -6,12 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "launch": "pnpm build && touch out/.nojekyll && echo 'lire.pipetil.com' > out/CNAME && gh-pages -d out --dotfiles -r git@github.com:LIRE-global/lire-web.git"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.2",
+    "framer-motion": "^12.23.25",
+    "gsap": "^3.13.0",
     "next": "16.0.7",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-countup": "^6.5.3",
+    "react-dom": "19.2.0",
+    "react-globe.gl": "^2.37.0",
+    "three": "^0.181.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -20,6 +28,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
+    "gh-pages": "^6.1.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
