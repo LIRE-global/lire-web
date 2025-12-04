@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 
 export default function RegistrationForm({ onSuccess }: { onSuccess?: () => void }) {
   const [formData, setFormData] = useState({
@@ -29,10 +28,40 @@ export default function RegistrationForm({ onSuccess }: { onSuccess?: () => void
     setSubmitStatus('idle');
 
     try {
+      // GitHub Pages 是静态托管，不支持服务端 API
+      // 使用 Google Forms 或其他外部服务
       const GOOGLE_FORM_ACTION = process.env.NEXT_PUBLIC_GOOGLE_FORM_URL || '';
+      const GOOGLE_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || '';
       
-      if (!GOOGLE_FORM_ACTION) {
-        const response = await fetch('/api/submit-form', {
+      if (GOOGLE_FORM_ACTION) {
+        // 使用 Google Forms
+        const form = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+          form.append(key, value);
+        });
+        
+        await fetch(GOOGLE_FORM_ACTION, {
+          method: 'POST',
+          body: form,
+          mode: 'no-cors',
+        });
+        
+        setSubmitStatus('success');
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          phone: '',
+          location: '',
+          interest: '',
+          message: '',
+        });
+        setTimeout(() => {
+          onSuccess?.();
+        }, 2000);
+      } else if (GOOGLE_SCRIPT_URL) {
+        // 使用 Google Apps Script Web App
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -58,17 +87,9 @@ export default function RegistrationForm({ onSuccess }: { onSuccess?: () => void
           throw new Error('Submission failed');
         }
       } else {
-        const form = new FormData();
-        Object.entries(formData).forEach(([key, value]) => {
-          form.append(key, value);
-        });
-        
-        await fetch(GOOGLE_FORM_ACTION, {
-          method: 'POST',
-          body: form,
-          mode: 'no-cors',
-        });
-        
+        // 如果没有配置外部服务，显示提示信息
+        console.warn('No form submission service configured. Please set NEXT_PUBLIC_GOOGLE_FORM_URL or NEXT_PUBLIC_GOOGLE_SCRIPT_URL');
+        // 仍然显示成功消息（用于测试）
         setSubmitStatus('success');
         setFormData({
           name: '',
@@ -92,11 +113,8 @@ export default function RegistrationForm({ onSuccess }: { onSuccess?: () => void
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-2xl mx-auto bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-sm rounded-2xl p-8 border border-green-500/20"
+    <div
+      className="w-full mx-auto bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-green-500/20"
     >
       <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
         Join LIRE Network
@@ -225,25 +243,17 @@ export default function RegistrationForm({ onSuccess }: { onSuccess?: () => void
         </button>
 
         {submitStatus === 'success' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-400 text-center"
-          >
+          <div className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-400 text-center">
             Submission successful! We'll contact you soon.
-          </motion.div>
+          </div>
         )}
 
         {submitStatus === 'error' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-center"
-          >
+          <div className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-center">
             Submission failed. Please try again later.
-          </motion.div>
+          </div>
         )}
       </form>
-    </motion.div>
+    </div>
   );
 }

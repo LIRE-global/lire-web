@@ -91,6 +91,7 @@ export default function GlobeComponent() {
     let materials: Array<{ material: THREE.ShaderMaterial; lon: number; lat: number }>;
     let material: THREE.ShaderMaterial;
     let baseMesh: THREE.Mesh;
+    let globeGroup: THREE.Group;
     let minMouseDownFlag: boolean;
     let mouseDown: boolean;
     let grabbing: boolean;
@@ -102,6 +103,10 @@ export default function GlobeComponent() {
       };
 
       scene = new THREE.Scene();
+
+      // 创建地球组，用于整体旋转
+      globeGroup = new THREE.Group();
+      scene.add(globeGroup);
 
       camera = new THREE.PerspectiveCamera(
         30,
@@ -165,7 +170,17 @@ export default function GlobeComponent() {
         opacity: 0.9,
       });
       baseMesh = new THREE.Mesh(baseSphere, baseMaterial);
-      scene.add(baseMesh);
+      
+      // 旋转地球组，使中国位于中心并朝向北半球
+      // Y 轴旋转：使中国位于中心（经度调整）
+      const chinaLongitude = 175; // 中国经度（东经）
+      globeGroup.rotation.y = chinaLongitude * (Math.PI / 180);
+      
+      // X 轴旋转：使地球朝向北半球（向上倾斜约 30 度）
+      // const northHemisphereTilt = 30; // 向上倾斜角度
+      // globeGroup.rotation.x = northHemisphereTilt * (Math.PI / 180);
+      
+      globeGroup.add(baseMesh);
     };
 
     const setShaderMaterial = () => {
@@ -265,7 +280,7 @@ export default function GlobeComponent() {
             const m = createMaterial(i, long, lat);
             const mesh = new THREE.Mesh(dotGeometry, m);
 
-            scene.add(mesh);
+            globeGroup.add(mesh);
           }
         }
       };
