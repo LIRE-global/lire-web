@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Volume2 } from 'lucide-react';
 import GlobeComponent from './components/Globe';
 import StatsCounter from './components/StatsCounter';
 import RegistrationForm from './components/RegistrationForm';
@@ -9,6 +10,7 @@ import RegistrationForm from './components/RegistrationForm';
 export default function Home() {
   const [particles, setParticles] = useState<Array<{ left: number; top: number; duration: number; delay: number }>>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     // 只在客户端生成随机位置，避免 hydration 错误
@@ -26,6 +28,20 @@ export default function Home() {
     
     return () => clearTimeout(timer);
   }, []);
+
+  const playPronunciation = () => {
+    if (isPlaying) return;
+    
+    setIsPlaying(true);
+    // 发音类似 Larry，但第二个音节是 "ri" (短音 i)
+    const utterance = new SpeechSynthesisUtterance('liri');
+    utterance.lang = 'en-US';
+    utterance.rate = 0.8;
+    utterance.pitch = 1.0;
+    utterance.onend = () => setIsPlaying(false);
+    utterance.onerror = () => setIsPlaying(false);
+    window.speechSynthesis.speak(utterance);
+  };
 
   return (
     <div className="min-h-screen bg-linear-to-b from-gray-900 via-gray-800 to-gray-900 text-white overflow-x-hidden">
@@ -70,11 +86,23 @@ export default function Home() {
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-              <span className="bg-linear-to-r from-green-400 via-emerald-400 to-green-500 bg-clip-text text-transparent">
-                Lithium Recycle
-              </span>
-              <br />
-              <span className="text-white">Global Network</span>
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="bg-linear-to-r from-green-400 via-emerald-400 to-green-500 bg-clip-text text-transparent">
+                  LIRE
+                </span>
+                <span className="text-xl md:text-2xl font-normal text-gray-400 italic">
+                  /ˈliri/
+                </span>
+                <button
+                  onClick={playPronunciation}
+                  disabled={isPlaying}
+                  className="text-gray-400 hover:text-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center w-6 h-6 md:w-7 md:h-7 shrink-0"
+                  aria-label="play pronunciation"
+                >
+                  <Volume2 className="w-full h-full" />
+                </button>
+              </div>
+              <span className="text-white block mt-1">Lithium Recycle Global Network</span>
             </h1>
             <p className="text-xl text-gray-300 leading-relaxed">
               Powering the Lithium-ion Battery Recycling Network and circular economy ecosystem.
