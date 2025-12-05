@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
+import Image from 'next/image';
 import GlobeComponent from './components/Globe';
 import StatsCounter from './components/StatsCounter';
 import RegistrationForm from './components/RegistrationForm';
@@ -50,7 +51,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-6 md:space-x-8">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">🔋</span>
+              <Image src="/LIRE-icon-cr.svg" alt="LIRE" width={32} height={32} unoptimized />
               <span className="text-xl font-bold bg-linear-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                 LIRE Network
               </span>
@@ -87,6 +88,7 @@ export default function Home() {
           <div className="space-y-6">
             <h1 className="text-5xl md:text-6xl font-bold leading-tight">
               <div className="flex items-center gap-3 flex-wrap">
+                <Image src="/LIRE-icon-cr.svg" alt="LIRE" width={64} height={64} className="w-10 h-10 md:w-12 md:h-12" unoptimized />
                 <span className="bg-linear-to-r from-green-400 via-emerald-400 to-green-500 bg-clip-text text-transparent">
                   LIRE
                 </span>
@@ -483,9 +485,9 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <span className="text-2xl">🔋</span>
+                <Image src="/LIRE-icon-cr.svg" alt="LIRE" width={32} height={32} unoptimized />
                 <span className="text-xl font-bold bg-linear-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
-                  LIRE Network
+                  LIRE Global
                 </span>
               </div>
               <p className="text-gray-400 text-sm">

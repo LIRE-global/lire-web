@@ -1,0 +1,15 @@
+{
+    "name": "Lithium Recycle",
+    "symbol": "LIRE",
+    "description": "Powering the Lithium-ion Battery Recycling Network and circular economy ecosystem.",
+    "extensions": {
+      "website": "https://lire.global",
+      "twitter": "https://x.com/LIRE_global"
+    },
+    "creator": {
+      "name": "LIRE Global",
+      "site": "https://lire.global"
+    },
+    "image": "https://lire.pipetil.com/LIRE-icon-cr.png",
+    "coverImage": "https://lire.pipetil.com/LIRE-cover.png"
+}
